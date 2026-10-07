@@ -1,0 +1,45 @@
+{
+  "base_keymap": "VSCode",
+  "icon_theme": "Material Icon Theme",
+  "ui_font_size": 18,
+  "buffer_font_size": 16,
+  "buffer_font_family": "Consolas",
+  "agent_ui_font_size": 16,
+  "agent_buffer_font_size": 14,
+  "mouse_wheel_zoom": true,
+
+  "auto_install_extensions": {
+    "material-icon-theme": true,
+    "catppuccin": true,
+    "html": true
+  },
+
+  "project_panel": { "dock": "left" },
+  "git_panel": { "dock": "left" },
+  "outline_panel": { "dock": "left" },
+  "agent": { "dock": "right" },
+  "terminal": { "dock": "bottom" },
+  "minimap": { "show": "always" },
+  "tab_bar": { "show": true },
+
+  "theme": {
+    "mode": "system",
+    "light": "Ayu Light",
+    "dark": "Ayu Dark"
+  },
+
+  "edit_predictions": { "provider": "zed" },
+  "session": { "trust_all_worktrees": true },
+
+  "agent_servers": {
+    "claude-acp": {
+      "type": "registry",
+      "default_config_options": {
+        "mode": "bypassPermissions",
+        "effort": "medium",
+        "fast": false,
+        "model": "opus"
+      }
+    }
+  }
+}
