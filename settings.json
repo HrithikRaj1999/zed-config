@@ -1,9 +1,14 @@
 {
+  "cli_default_open_behavior": "existing_window",
   "base_keymap": "VSCode",
   "icon_theme": "Material Icon Theme",
-  "ui_font_size": 18,
-  "buffer_font_size": 16,
-  "buffer_font_family": "Consolas",
+
+  "buffer_font_family": "Cascadia Mono",
+  "buffer_font_size": 15,
+  "buffer_font_weight": 450,
+  "buffer_line_height": "comfortable",
+  "ui_font_size": 16,
+  "ui_font_weight": 400,
   "agent_ui_font_size": 16,
   "agent_buffer_font_size": 14,
   "mouse_wheel_zoom": true,
@@ -11,13 +16,15 @@
   "auto_install_extensions": {
     "material-icon-theme": true,
     "catppuccin": true,
-    "html": true
+    "html": true,
+    "graphql": true,
+    "toml": true,
   },
 
   "project_panel": { "dock": "left" },
-  "git_panel": { "dock": "left" },
+  "git_panel": { "tree_view": true, "dock": "left" },
   "outline_panel": { "dock": "left" },
-  "agent": { "dock": "right" },
+  "agent": { "flexible": false, "dock": "right" },
   "terminal": { "dock": "bottom" },
   "minimap": { "show": "always" },
   "tab_bar": { "show": true },
@@ -25,21 +32,34 @@
   "theme": {
     "mode": "system",
     "light": "Ayu Light",
-    "dark": "Ayu Dark"
+    "dark": "Catppuccin Mocha",
   },
 
   "edit_predictions": { "provider": "zed" },
   "session": { "trust_all_worktrees": true },
 
   "agent_servers": {
+    "github-copilot-cli": {
+      "type": "registry",
+      "default_config_options": {
+        "allow_all": "on",
+        "reasoning_effort": "xhigh",
+        "model": "claude-opus-5.5",
+      },
+    },
     "claude-acp": {
+      "favorite_config_option_values": {
+        "model": [
+          "haiku"
+        ]
+      },
       "type": "registry",
       "default_config_options": {
         "mode": "bypassPermissions",
-        "effort": "medium",
-        "fast": false,
-        "model": "opus"
-      }
-    }
-  }
+        "effort": "low",
+        "fast": true,
+        "model": "sonnet",
+      },
+    },
+  },
 }

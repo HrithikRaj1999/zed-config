@@ -1,0 +1,14 @@
+# Public repo: only allow known config files, ignore everything else.
+/*
+!/.gitignore
+!/.gitattributes
+!/README.md
+!/install.ps1
+!/sync.ps1
+!/settings.json
+!/keymap.json
+!/tasks.json
+!/debug.json
+!/AGENTS.md
+!/themes/
+!/snippets/
