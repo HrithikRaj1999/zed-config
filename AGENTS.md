@@ -1,74 +1,48 @@
 # AGENTS.md
 
-## Core Principles
+## 1. Truth first
+- Use only official docs, the repo code, or the docs tool (Context7 MCP or `/docs`). Note the source in one line.
+- Never invent APIs, functions, args or behavior. If unsure, say "I do not know" and ask one short question.
+- Read the related files before changing anything.
 
-### 1. Use Only Docs (No Hallucination)
-- **Fetch First:** Every code suggestion, API call, function, or argument must come directly from official docs or the existing codebase.
-- **Do Not Guess:** Never invent functions, methods, parameters, or behavior. If it is not in the docs or code, say "I do not know", ask a short question if needed, and stop.
-- **Stay Faithful:** Match answers strictly to the fetched context (Faithfulness, Answer Relevancy, Context Precision, Context Recall, Answer Correctness)[cite: 1].
+## 2. Scope
+- Do one small, checkable goal per loop.
+- Touch only the files the goal needs. Edit existing files before you create new ones.
+- Do not refactor, reformat or "improve" unrelated code.
+- Do not add new dependencies without asking.
 
-### 2. Keep Code Short and Simple
-- **Minimal Code:** Write the smallest possible code that solves the current step.
-- **Required Args Only:** Use only required arguments. Do not add optional parameters, extra configs, or default flags unless asked.
-- **No Chores:** Make it work simply. Skip boilerplate, extra error handling, cleanup, or abstractions that were not requested.
+## 3. Production rules
+- Validate input at trust boundaries: API handlers, user input, env vars and external responses. Trust internal callers.
+- Handle errors only where you can act on them: retry, fallback or a clear message. Otherwise let them bubble up.
+- Every network or DB call needs a timeout. Add retries only for idempotent calls.
+- Use parameterized queries. Never use string-built SQL or shell commands built from user input.
+- Never log secrets, tokens or PII. Never hardcode secrets. Read them from env or the secret store.
+- Never put config values like URLs, limits or flags inline. Read them from config. Inline other one-off values.
+- Logs must be structured, short and plain, with no emoji. Use the repo's logger, not console.
 
-### 3. Simple English
-- Use plain, everyday English and short sentences.
-- Avoid jargon, big words, or long explanations.
+## 4. Code style (match the file)
+- Copy the file's existing style: quotes, semicolons, casing, imports, and how errors are handled.
+- Use short, natural names (`users`, `cfg`, `err`, `isAuthed`). Do not put the type in the name.
+- Prefer early returns over nested if/else. Avoid nested ternaries and long chains.
+- Inline single-use logic. Do not add classes, factories or generics until a second real use exists.
+- Let type inference work. Type function signatures and exported APIs.
+- Write a comment only for the "why": a workaround, an odd business rule or an edge case. Keep it short and lowercase.
+- Do not add narrator comments, banners, numbered steps, placeholder or TODO comments, or commented-out code.
+- Add docstrings only on exported or public APIs, or where the repo already uses them.
 
-### 4. Stay in Scope & Edit First
-- Only touch the files and logic needed for the current step. Do not "improve" unrelated code.
-- Change existing files first. Create a new file only when clearly required.
-- If something is unclear, ask instead of assuming.
+## 5. Loop: code -> test -> check
+1. **Code**: Make the smallest change for the goal.
+2. **Test**: Add or update a test for the change in the repo's existing framework. Run it.
+3. **Gate**: Run lint, typecheck and the full existing test suite. Show each command and its real output.
+4. **Check**: If anything fails, state the exact error in plain words and go back to step 1. If everything passes, say in one sentence what is now done.
 
-### 5. Show Evidence & Fail Fast
-- After every Test step, show the actual command and its real output.
-- Never say "it works" or "it should work" without the test result.
-- When a test fails, state the exact error in plain English and go straight back to Code.
-- When using docs, briefly note where the info came from.
+Never say "it works" or "it should work" without that output.
 
-### 6. One Clear Goal Per Loop
-- Each Code → Test → Evaluate cycle must have one small, checkable goal.
-- Finish that goal before starting the next one.
-- At the end of a successful loop, state in one sentence what is now done.
+## 6. Safety
+- Never delete files, drop data or run destructive commands, migrations or force-pushes unless asked.
+- Never touch secrets, credentials or prod config unless asked.
 
-### 7. Safety Boundaries
-- Never delete files, drop databases, or run destructive commands unless explicitly asked.
-- Never change secrets, credentials, or production config without being told.
-
----
-
-## End-to-End Loop: Code → Test → Evaluate → Loop
-
-Follow this cycle strictly. Do not skip steps.
-
-### Step 1: Code
-- Read the task and relevant docs/codebase first.
-- Write the **smallest** change that moves the task forward.
-- Output only the code needed for this step.
-
-### Step 2: Test
-- Immediately run a minimal test for the change just made.
-- Prefer the simplest possible test (existing unit test, assertion, or direct run).
-- Do not add new test frameworks or helpers.
-
-### Step 3: Evaluate
-- Check the test result against the expected outcome.
-- If it fails: note the exact error and check the docs.
-- If it passes: confirm it matches the requirement before moving on.
-
-### Step 4: Loop
-- If failed → return to Step 1 with the error info.
-- If passed → move to the next smallest step, or stop if the main goal is met.
-
----
-
-## Hard Rules
-1. Never invent APIs, functions, or arguments.
-2. Never write more code than the current step needs.
-3. Never skip the test step.
-4. Never say "it should work" — only report what the test actually showed.
-5. Prefer short, clear answers over long explanations.
-6. Never expand scope or touch unrelated code.
-7. Never delete or destroy anything without explicit permission.
-8. Always show real test output as evidence.
+## 7. Writing (chat, commits, PRs)
+- Use plain short words. No filler openers or closers, no hype words, no em-dashes, no smart quotes, no emoji.
+- Commit messages are lowercase and short: `fix token refresh on 401`.
+- PR notes are 1-3 sentences: what changed, why, and how it was tested.
